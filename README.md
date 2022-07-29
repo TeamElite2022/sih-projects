@@ -10,3 +10,7 @@ THE DOUBT: how to connect the uid of the authenticated user to the realtime data
 
 
 Another drawback of authentication is, since I have put three providers in which email and phone are mandatory, when the submit button is clicked two accounts are created for a single user in the database
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Edited code: In the code that is  edited, I am getting an error like user is null when I get redirected to the profile page
