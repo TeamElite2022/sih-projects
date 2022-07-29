@@ -1,5 +1,8 @@
 
-
+src="https://www.gstatic.com/firebasejs/8.2.9/firebase-app.js"
+src="https://www.gstatic.com/firebasejs/8.2.9/firebase-auth.js"
+src="https://www.gstatic.com/firebasejs/8.2.9/firebase-firestore.js"
+src="https://www.gstatic.com/firebasejs/8.2.9/firebase-storage.js"
 
 async function signup(e){
     e.preventDefault()
@@ -29,7 +32,12 @@ async function login(e){
     const password  = document.querySelector('#loginPassword')    
     try{
       const result = await firebase.auth().signInWithEmailAndPassword(email.value, password.value)     
-     console.log(result)  
+     alert(result)
+     var user = firebase.auth().currentUser;
+if (user !== null) {
+  const uid = user.uid;
+}
+     window.location="profile2.html"  
     }catch(err){
         window.alert(err)        
     }
@@ -39,6 +47,7 @@ async function login(e){
 
 function logout(){
     firebase.auth().signOut()
+    alert("logout")
 }
 
 async function loginWithGoogle(){
@@ -53,3 +62,6 @@ async function loginWithGoogle(){
     
   
 }
+
+
+
