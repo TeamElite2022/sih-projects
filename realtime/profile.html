@@ -25,8 +25,9 @@
     <button id="updBtn" >Update</button><br>
     <button id="delBtn" >Delete</button>
 </form>
+<script src="veri.js"></script>
 <script src= "https://www.gstatic.com/firebasejs/7.7.0/firebase-app.js"></script>
-          
+<script src= "https://www.gstatic.com/firebasejs/7.7.0/firebase-auth.js"></script> 
 <script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-storage.js"></script>
  <script type="module">
 
@@ -66,6 +67,7 @@ appId: "1:292918906000:web:69bf0126437f9ea2abdc15"
     // Initialize Firebase
   
     const app = initializeApp(firebaseConfig);
+    
 
     import { getDatabase, ref, get, set, child, update, remove } from "https://www.gstatic.com/firebasejs/9.9.1/firebase-database.js";
 
@@ -78,7 +80,7 @@ appId: "1:292918906000:web:69bf0126437f9ea2abdc15"
     var insBtn=document.getElementById("insBtn")
 
     function InsertData(){
-        set(ref(db, "Profile/"+ code.value),{
+        set(ref(db, "Profile/"+ user.uid),{
             
             NameofInst:name.value,
             CollCode:code.value,
@@ -96,7 +98,7 @@ appId: "1:292918906000:web:69bf0126437f9ea2abdc15"
     function SelectData(){
         const dbref = ref(db);
 
-        get(child(dbref,"Profile/"+ code.value)).then((snapshot)=>{
+        get(child(dbref,"Profile/"+ user.uid)).then((snapshot)=>{
             if(snapshot.exists()){
                 
                 name.value=snapshot.val().NameofInst;
@@ -113,7 +115,7 @@ appId: "1:292918906000:web:69bf0126437f9ea2abdc15"
     }
 
     function UpdateData(){
-        update(ref(db, "Profile/"+ code.value),{
+        update(ref(db, "Profile/"+ user.uid),{
             
             NameofInst:name.value,
             CollCode:code.value,
@@ -129,7 +131,7 @@ appId: "1:292918906000:web:69bf0126437f9ea2abdc15"
     }
 
     function DeleteData(){
-        remove(ref(db, "Profile/"+ code.value))
+        remove(ref(db, "Profile/"+ user.uid))
         .then(()=>{
                 alert("data deleted successfully")
         })
