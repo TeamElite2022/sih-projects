@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <style>#image{
+        height: 200px;
+        width: 200px;
+    }</style>
+</head>
+<body>
+    <h3>this is profile section going to realtime database</h3>
+<form>
+    <input type="file"  id="photo">
+    <img id="image">
+    <button id="upld" onclick="uploadImage()" type="button">Upload Image</button><br>
+    Name of the institution:<input type="text" id="nameofinst"><br>
+    Institution code:<input type="text" id="code"><br>
+    Address:<input type="text" id="address"><br>
+    Principal name:<input type="text" id="principal"><br>
+    <button id="insBtn" >Insert</button><br>
+    <button id="selBtn" type="button">Read</button><br>
+    <button id="updBtn" >Update</button><br>
+    <button id="delBtn" >Delete</button>
+</form>
+<script src="veri.js"></script>
+<script src= "https://www.gstatic.com/firebasejs/7.7.0/firebase-app.js"></script>
+<script src= "https://www.gstatic.com/firebasejs/7.7.0/firebase-auth.js"></script> 
+<script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-storage.js"></script>
+ <script type="module">
+
+    // Import the functions you need from the SDKs you need
+  
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.9.1/firebase-app.js";
+  
+    // TODO: Add SDKs for Firebase products that you want to use
+  
+    // https://firebase.google.com/docs/web/setup#available-libraries
+  
+  
+    // Your web app's Firebase configuration
+  
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  
+    const firebaseConfig = {
+  
+        apiKey: "AIzaSyCYybtuNQHaMpcKNdTyjK_e0Y0k5xChMQI",
+
+authDomain: "mgpa-6cc10.firebaseapp.com",
+
+databaseURL: "https://mgpa-6cc10-default-rtdb.firebaseio.com",
+
+projectId: "mgpa-6cc10",
+
+storageBucket: "mgpa-6cc10.appspot.com",
+
+messagingSenderId: "292918906000",
+
+appId: "1:292918906000:web:69bf0126437f9ea2abdc15"
+
+  
+    };
+  
+  
+    // Initialize Firebase
+  
+    const app = initializeApp(firebaseConfig);
+    
+
+    import { getDatabase, ref, get, set, child, update, remove } from "https://www.gstatic.com/firebasejs/9.9.1/firebase-database.js";
+
+    const db = getDatabase();
+    
+    var name=document.getElementById("nameofinst")
+    var code=document.getElementById("code")
+    var address=document.getElementById("address")
+    var principal=document.getElementById("principal")
+    var insBtn=document.getElementById("insBtn")
+    var uuid = localStorage.getItem('currentUser')
+    function InsertData(){
+        set(ref(db, "Profile/"+ uuid),{
+            
+            NameofInst:name.value,
+            CollCode:code.value,
+            Address:address.value,
+            Principal:principal.value
+        })
+        .then(()=>{
+                alert("data stored successfully")
+        })
+        .catch((error)=>{
+            alert("couldn't store the data due to "+error)
+        });
+    }
+
+    function SelectData(){
+        const dbref = ref(db);
+
+        get(child(dbref,"Profile/"+ uuid)).then((snapshot)=>{
+            if(snapshot.exists()){
+                
+                name.value=snapshot.val().NameofInst;
+                address.value=snapshot.val().Address;
+                principal.value=snapshot.val().Principal;
+            }
+            else{
+                alert("no data found")
+            }
+        })
+        .catch((error)=>{
+            alert(error)
+        });
+    }
+
+    function UpdateData(){
+        update(ref(db, "Profile/"+ user.uid),{
+            
+            NameofInst:name.value,
+            CollCode:code.value,
+            Address:address.value,
+            Principal:principal.value
+        })
+        .then(()=>{
+                alert("data updated successfully")
+        })
+        .catch((error)=>{
+            alert("couldn't store the data due to "+error)
+        });
+    }
+
+    function DeleteData(){
+        remove(ref(db, "Profile/"+ user.uid))
+        .then(()=>{
+                alert("data deleted successfully")
+        })
+        .catch((error)=>{
+            alert("couldn't store the data due to "+error)
+        });
+    }
+
+  insBtn.addEventListener('click',InsertData);
+  selBtn.addEventListener('click',SelectData);
+  updBtn.addEventListener('click',UpdateData);
+  delBtn.addEventListener('click',DeleteData);
+  </script>
+  <script>
+    var Config = {
+  
+      apiKey: "AIzaSyANjKh498ZCCe8GRLVfJrP9FNPoSJI14JA",
+  
+      authDomain: "first-666d6.firebaseapp.com",
+  
+      databaseURL: "https://first-666d6-default-rtdb.firebaseio.com",
+  
+      projectId: "first-666d6",
+  
+      storageBucket: "first-666d6.appspot.com",
+  
+      messagingSenderId: "531648683818",
+  
+      appId: "1:531648683818:web:b30830bc8edff2d24c0853",
+  
+      measurementId: "G-62SHH3CQNN"
+  
+    };
+  
+  
+    // Initialize Firebase
+  
+    firebase.initializeApp(Config);
+    console.log(firebase);
+   
+
+    function uploadImage() {
+        const ref = firebase.storage().ref();
+const file = document.querySelector("#photo").files[0];
+const name = +new Date() + "-" + file.name;
+const metadata = {
+contentType: file.type
+};
+const task = ref.child(name).put(file, metadata);
+task
+.then(snapshot => snapshot.ref.getDownloadURL())
+.then(url => {
+  console.log(url);
+  alert("image uploaded successfully")
+  const image = document.querySelector("#image")
+  image.src = url;
+})
+.catch(console.error);
+}
+</script>
+</body>
+</html>
