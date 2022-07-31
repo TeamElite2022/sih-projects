@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+  
+            
+</head>
+<body>
+    <nav>
+        <div class="nav-wrapper #fbc02d yellow darken-2">
+          <a href="#" class="brand-logo">Project Time</a>
+          <ul id="nav-mobile" class="right">
+            <li id="loginli"><a class="modal-trigger" href="#modal2">Login</a></li>
+            <li  id="signupli"><a class="modal-trigger" href="#modal1">Signup</a></li>
+            <li  id="logoutli"><a onclick="logout()">Logout</a></li>
+          </ul>
+        </div>
+      </nav>
+    <!--Signup Modal -->
+  <div id="modal1" class="modal">
+    <div class="modal-content">
+      <h4>Signup</h4>
+      <form autocomplete="off" onsubmit="signup(event)">
+        <input type="email" id="signupEmail" placeholder="email" />
+        <input type="password" id="signupPassword" placeholder="password" />
+        confirm password<input type="password" id="signupcPassword" placeholder="enter your password"><br><br>
+        phone no<input type="text" id="number" placeholder="+923********">
+    <div id="recaptcha-container"></div>
+    <!--before sending the code tro the given number, a recaptcha must be checked called "the recaptcha verifier"-->
+    <button type="button" onclick="phoneAuth()">SendCode</button><br><br>
+    <!-- in this code, the otp is sent only where both the passwords match-->
+    <!--when the above function is called the code is sent to the mobile number-->
+    enter OTP<input type="text" id="verificationCode" placeholder="Enter verification code" required>
+    <!--the otp enter section-->
+    <button type="button" onclick="codeverify()">Verify code</button>
+        <button class="btn waves-effect #fbc02d yellow darken-2" type="submit">submit</button>   
+      </form>
+       <button class="btn waves-effect blue" onclick="loginWithGoogle()">Login with google</button>
+      
+     
+    </div>
+  </div>
+         
+    <!--login Modal -->
+  <div id="modal2" class="modal">
+    <div class="modal-content">
+      <h4>Login</h4>
+      <form autocomplete="off" onsubmit="login(event)">
+        <input type="email" id="loginEmail" placeholder="email" />
+        <input type="password" id="loginPassword" placeholder="password" />
+        <button class="btn waves-effect #fbc02d yellow darken-2" type="submit">submit</button>   
+      </form>
+      <button class="btn waves-effect blue" onclick="loginWithGoogle()">Login with google</button>
+      
+     
+    </div>
+  </div>
+<!--this area need firestore and that is why he needed firestore-db-->
+    <!--edit profile -->
+  <div id="modal3" class="modal">
+    <div class="modal-content">
+      <h4>Edit your details</h4>
+      <div class="file-field input-field">
+        <div class="btn #fbc02d yellow darken-2">
+          <span>File</span>
+          <input type="file" accept="image/*" onchange="uploadImage(event)" />
+        </div>
+        <div class="file-path-wrapper">
+          <input class="file-path validate" type="text">
+        </div>
+      </div>
+      <form autocomplete="off" id="editProfile" onsubmit="updateUserProfile(event)">
+        <input type="email" name="profileEmail" placeholder="email" />
+        <input type="text" name="fname" placeholder="First name" />
+        <input type="text" name="lname" placeholder="Last name" />
+        <input type="text" name="heiname" placeholder="Name of the HEI" />
+        <input type="date" name="year" placeholder="Established Year" />
+        <input type="text" name="aicte" placeholder="AICTE code" />
+        <input type="url" name="link" placeholder="link" />
+        <input type="text" name="state" placeholder="State" />
+        <input type="text" name="district" placeholder="District" />
+        <input type="text" name="pincode" placeholder="Pincode" />
+
+        <button class="btn waves-effect #fbc02d yellow darken-2" type="submit">submit</button>   
+      </form>
+  
+      
+     
+    </div>
+  </div>
+
+
+  <div class="center">
+    <h1>your account details</h1>
+    <img id="proimg" class="circle" src="./assets/noimage.png" alt="noimage" style="width: 50%;height: auto;" />
+    <div class="userDetails"></div>
+  </div>
+         
+  <table id="table" style="display: none;">
+    <thead>
+      <tr>
+          <th>Email</th>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <th>HEI Name</th>
+          <th>Established year</th>
+          <th>AICTE code</th>
+          <th>portfolio</th>
+          <th>State</th>
+          <th>District</th>
+          <th>Pincode</th>
+      </tr>
+    </thead>
+
+    <tbody id="tbody">
+     
+    </tbody>
+  </table>
+
+<!-- this is bootstrap and css so for now we don't need this-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>  
+<script>
+      document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.modal');
+    var instances = M.Modal.init(elems);
+  });
+</script> 
+<!--until here-->
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-storage.js"></script>
+
+<script>
+  // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyCYybtuNQHaMpcKNdTyjK_e0Y0k5xChMQI",
+
+    authDomain: "mgpa-6cc10.firebaseapp.com",
+
+    projectId: "mgpa-6cc10",
+
+    storageBucket: "mgpa-6cc10.appspot.com",
+
+    messagingSenderId: "292918906000",
+
+    appId: "1:292918906000:web:69bf0126437f9ea2abdc15"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+</script>
+<script>
+  window.onload=function () {
+render();
+};
+// the below render function gives the recaptcha in a particular session
+function render() {
+window.recaptchaVerifier=new firebase.auth.RecaptchaVerifier('recaptcha-container');
+recaptchaVerifier.render();
+}
+function phoneAuth() {
+//get the number
+var number=document.getElementById('number').value;
+var pass = document.getElementById('signupPassword').value;
+var cpass = document.getElementById('signupcPassword').value;
+//phone number authentication function of firebase
+//it takes two parameter first one is number,,,second one is recaptcha
+if(pass == cpass){
+firebase.auth().signInWithPhoneNumber(number,window.recaptchaVerifier).then(function (confirmationResult) {
+    //here both the passwords are verified and the code is sent
+    window.confirmationResult=confirmationResult;
+    coderesult=confirmationResult;
+    console.log(coderesult);
+    alert("Message sent");
+}).catch(function (error) {
+    alert(error.message);
+});
+}
+else{
+alert("Please check both the passwords");
+}
+}
+function codeverify() {
+//code verification
+var code=document.getElementById('verificationCode').value;
+coderesult.confirm(code).then(function (result) {
+    alert("Successfully registered");
+    var user=result.user;
+    console.log(user);
+}).catch(function (error) {
+    alert(error.message);
+});
+}
+</script>
+<script src="auth.js"></script>
+<script src="firestore-db.js" ></script>
+</body>
+</html>
