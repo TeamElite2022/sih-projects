@@ -148,22 +148,19 @@ appId: "1:292918906000:web:69bf0126437f9ea2abdc15"
   <script>
     var Config = {
   
-      apiKey: "AIzaSyANjKh498ZCCe8GRLVfJrP9FNPoSJI14JA",
-  
-      authDomain: "first-666d6.firebaseapp.com",
-  
-      databaseURL: "https://first-666d6-default-rtdb.firebaseio.com",
-  
-      projectId: "first-666d6",
-  
-      storageBucket: "first-666d6.appspot.com",
-  
-      messagingSenderId: "531648683818",
-  
-      appId: "1:531648683818:web:b30830bc8edff2d24c0853",
-  
-      measurementId: "G-62SHH3CQNN"
-  
+      apiKey: "AIzaSyCYybtuNQHaMpcKNdTyjK_e0Y0k5xChMQI",
+
+authDomain: "mgpa-6cc10.firebaseapp.com",
+
+databaseURL: "https://mgpa-6cc10-default-rtdb.firebaseio.com",
+
+projectId: "mgpa-6cc10",
+
+storageBucket: "mgpa-6cc10.appspot.com",
+
+messagingSenderId: "292918906000",
+
+appId: "1:292918906000:web:69bf0126437f9ea2abdc15"
     };
   
   
@@ -172,15 +169,17 @@ appId: "1:292918906000:web:69bf0126437f9ea2abdc15"
     firebase.initializeApp(Config);
     console.log(firebase);
    
+    var uuid = localStorage.getItem('currentUser')
 
     function uploadImage() {
         const ref = firebase.storage().ref();
+        const imagesRef= ref.child('profiles');
 const file = document.querySelector("#photo").files[0];
 const name = +new Date() + "-" + file.name;
 const metadata = {
 contentType: file.type
 };
-const task = ref.child(name).put(file, metadata);
+const task = imagesRef.child(uuid).put(file, metadata);
 task
 .then(snapshot => snapshot.ref.getDownloadURL())
 .then(url => {
