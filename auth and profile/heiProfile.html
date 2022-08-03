@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <style>
+    #image{
+        height: 200px;
+        width: 200px;
+        border: 2px solid black;
+    }</style>
+     <style>#image{
+        height: 200px;
+        width: 200px;
+    }
+    .khu{
+            background-color: black;
+            border-radius: 25px;
+        }
+        .khu ul{
+            overflow: auto;
+        }
+        .khu li{
+            float: left;
+            list-style: none;
+            margin: 10px;
+        }
+        .khu li a{
+            padding: 5px 5px;
+            text-decoration: none;
+            color: white;
+        }
+        .khu li:hover{
+            background-color: #333333;
+        }
+    </style>
+</head>
+<body>
+    <nav class="khu">
+        <ul>
+            <li><a href="heiProfile.html">hei</a></li>
+            <li><a href="adminProfile.html">Admin</a></li>
+            <li><a href="faProfile.html">fa</a></li>
+        </ul>
+    </nav>
+    <h3>this is profile section going to realtime database</h3>
+<form>
+    <input type="file"  id="photo">
+    <img id="image">
+    <button id="upld" onclick="uploadImage()" type="button">Upload Image</button><br>
+    <form autocomplete="off" id="editProfile" >   
+        Name of the Institution:<input type="text" name="heiname" id="heiname" placeholder="Name of the HEI" /><br>
+        College Category<select name="category" id="Colcategory" required>
+            <option selected disabled>Choose here</option>
+            <option value="uni">University</option>
+            <option value="deemed">Deemed University</option>
+            <option value="deemtobe">Deemed to be University</option>
+            <option value="aff">Affiliated</option>
+            <option value="auto">Autonomous</option>
+        </select><br>
+        Aicte Code:<input type="text" name="aicte" id="aicte" placeholder="AICTE code" /><br>
+        Established Year:<input type="date" name="year" id="year" placeholder="Established Year" /><br>        
+        Portfolio:<input type="url" name="link" id="link" placeholder="link" /><br>
+        Principal Name:<input type="text" id="princi"/><br>
+        Contact No.:<input type="tel" id="phone"/><br>
+        State<input type="text" name="state" id="state" placeholder="State" /><br>
+        District<input type="text" name="district" id="district" placeholder="District" /><br>
+        Pincode:<input type="text" name="pincode" id="pincode" placeholder="Pincode" /><br>   
+        Social links:<input type="link" id="social"/><br>
+        Brochure:<input type="file"  id="brochure">
+        Declaration Form:<input type="file"  id="dec">
+        <button id="upld" onclick="uploadFile()" type="button">Upload Files</button><br>
+    
+    </form>
+      <div class="userDetails"></div>
+    <button id="insBtn" onclick="updateHEIProfile(event)" >Insert</button><br>
+    <button id="selBtn" type="button" onclick="retrieveImage()">Read</button><br>
+</form>
+<script src="firestore-db.js"></script>
+<script src= "https://www.gstatic.com/firebasejs/7.7.0/firebase-app.js"></script>
+<script src= "https://www.gstatic.com/firebasejs/7.7.0/firebase-auth.js"></script> 
+<script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-storage.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-database.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-firestore.js"></script>
+ 
+ <script type="module">
+  
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.9.1/firebase-app.js";
+  
+    const firebaseConfig = {
+  
+        apiKey: "AIzaSyCYybtuNQHaMpcKNdTyjK_e0Y0k5xChMQI",
+
+authDomain: "mgpa-6cc10.firebaseapp.com",
+
+databaseURL: "https://mgpa-6cc10-default-rtdb.firebaseio.com",
+
+projectId: "mgpa-6cc10",
+
+storageBucket: "mgpa-6cc10.appspot.com",
+
+messagingSenderId: "292918906000",
+
+appId: "1:292918906000:web:69bf0126437f9ea2abdc15"
+
+  
+    };  
+  
+    // Initialize Firebase
+  
+    const app = initializeApp(firebaseConfig);    
+
+    import { getDatabase, ref, get, set, child, update, remove } from "https://www.gstatic.com/firebasejs/9.9.1/firebase-database.js";
+
+    const db = getDatabase();
+    
+    var heiname = document.getElementById("heiname")
+   var ColCategory = document.getElementById("Colcategory")   
+   var year = document.getElementById("year")
+   var aicte = document.getElementById("aicte")
+   var link = document.getElementById("link")
+   var state = document.getElementById("state")
+   var district = document.getElementById("district")
+   var pincode = document.getElementById("pincode")
+   var principal = document.getElementById("princi")
+   var phone = document.getElementById("phone")
+   var social = document.getElementById("social")
+
+    
+    var insBtn=document.getElementById("insBtn")
+    var uuid = localStorage.getItem('currentUser')
+    function InsertData(){
+        set(ref(db, "HEIProfile/"+ uuid),{
+            
+            Category:"HEI",
+            HEIname:heiname.value,
+            CollegeCategory:ColCategory.value,
+            Eyear:year.value,
+            AICTE:aicte.value,
+            Link:link.value,
+            State:state.value,
+            District:district.value,
+            Pincode:pincode.value,
+            Principal:principal.value,
+            PhoneNumber:phone.value,
+            SocialLink:social.value
+
+        })
+        .then(()=>{
+                alert("data stored successfully")
+        })
+        .catch((error)=>{
+            alert("couldn't store the data due to "+error)
+        });
+    }
+
+    function SelectData(){
+        const dbref = ref(db);
+
+        get(child(dbref,"HEIProfile/"+ uuid)).then((snapshot)=>{
+            if(snapshot.exists()){
+                
+                heiname.value=snapshot.val().HEIname;
+                ColCategory.value=snapshot.val().CollegeCategory;
+                year.value=snapshot.val().Eyear;
+                aicte.value=snapshot.val().AICTE;
+                link.value=snapshot.val().Link;
+                state.value=snapshot.val().State;
+                district.value=snapshot.val().District;
+                pincode.value=snapshot.val().Pincode;
+                principal.value=snapshot.val().Principal;
+                phone.value=snapshot.val().PhoneNumber;
+                social.value=snapshot.val().SocialLink;
+            }
+            else{
+                alert("no data found")
+            }
+        })
+        .catch((error)=>{
+            alert(error)
+        });
+    }
+
+  insBtn.addEventListener('click',InsertData);
+  selBtn.addEventListener('click',SelectData);
+  
+  </script>
+  <script>
+    var Config = {
+  
+      apiKey: "AIzaSyCYybtuNQHaMpcKNdTyjK_e0Y0k5xChMQI",
+
+authDomain: "mgpa-6cc10.firebaseapp.com",
+
+databaseURL: "https://mgpa-6cc10-default-rtdb.firebaseio.com",
+
+projectId: "mgpa-6cc10",
+
+storageBucket: "mgpa-6cc10.appspot.com",
+
+messagingSenderId: "292918906000",
+
+appId: "1:292918906000:web:69bf0126437f9ea2abdc15"
+    };
+  
+  
+    // Initialize Firebase
+  
+    firebase.initializeApp(Config);
+    console.log(firebase);
+   
+    var uuid = localStorage.getItem('currentUser')
+
+var imgName, imgUrl,brocUrl,decUrl;
+var files=[];
+var reader;
+
+    function uploadImage() {
+        const ref = firebase.storage().ref();
+        const imagesRef= ref.child('profiles');
+const file = document.querySelector("#photo").files[0];
+const name = +new Date() + "-" + file.name;
+console.log(uuid)
+const metadata = {
+contentType: file.type
+};
+const task = imagesRef.child(uuid).put(file, metadata);
+task
+.then(snapshot => snapshot.ref.getDownloadURL())
+.then(function(url) {
+  imgUrl = url;
+
+  firebase.database().ref('HEIFiles/ProfilePics/'+uuid).set({
+    profilePic:imgUrl
+  });
+  alert("image uploaded successfully")
+  const image = document.querySelector("#image")
+  image.src = url;
+})
+.catch(console.error);
+}
+
+function uploadFile() {
+        const ref = firebase.storage().ref();
+        const fileRef= ref.child('Brochures');
+const file1 = document.querySelector("#brochure").files[0];
+const file2 = document.querySelector("#dec").files[0];
+const name1 = +new Date() + "-" + file1.name;
+console.log(uuid)
+const metadata1 = {
+contentType: file1.type
+};
+const task = fileRef.child(uuid).put(file1, metadata1);
+task
+.then(snapshot => snapshot.ref.getDownloadURL())
+.then(function(url) {
+  brocUrl = url;
+
+  firebase.database().ref('HEIFiles/Brochures/'+uuid).set({
+    brochure:brocUrl
+  });
+})
+.catch(console.error);
+
+const name2 = +new Date() + "-" + file2.name;
+const metadata2 = {
+contentType: file2.type
+};
+const task1 = fileRef.child(uuid).put(file2, metadata2);
+task1
+.then(snapshot => snapshot.ref.getDownloadURL())
+.then(function(url) {
+  decUrl = url;
+
+  firebase.database().ref('HEIFiles/Declaration Forms/'+uuid).set({
+    decForm:decUrl
+  });
+  
+  alert("files uploaded successfully")
+})
+.catch(console.error);
+
+}
+
+function retrieveImage(){
+
+    firebase.database().ref('heiProfilePics/'+ uuid).on('value',function(snapshot){
+        document.getElementById('image').src= snapshot.val().profilePic;
+    });
+}
+
+
+</script>
+</body>
+</html>
