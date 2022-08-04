@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!--<link rel="stylesheet" href="style.css" />-->
+    <title>Email Template</title>
+    <style>
+        #image{
+        height: 200px;
+        width: 200px;
+    }
+        .khu{
+            background-color: black;
+            border-radius: 25px;
+        }
+        .khu ul{
+            overflow: auto;
+        }
+        .khu li{
+            float: left;
+            list-style: none;
+            margin: 10px;
+        }
+        .khu li a{
+            padding: 5px 5px;
+            text-decoration: none;
+            color: white;
+        }
+        .khu li:hover{
+            background-color: #333333;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="khu">
+    <ul>
+        <li><a href="adminProfile.html">Admin</a></li>
+        <li><a href="faProfile.html">fa</a></li>
+        <li><a href="heiProfile.html">hei</a></li>
+    </ul>
+</nav>
+    <h1>Profile</h1>
+    <form class="contact-form">
+        <label >First Name</label><br />
+        <input class="firstname" type="text" id="fname" required /><br />
+        <label >Last Name</label><br />
+        <input class="lastname" type="text" id="lname" required /><br />
+        <label >category</label><br />
+        <select name="category" id="category" class="cat" required>
+            <option selected disabled>Choose here</option>
+            <option value="govt">govt</option>
+            <option value="govt/aided">govt/aided</option>
+            <option value="private">private</option>
+        </select><br><br>
+        <input type="file"  id="photo">
+    <img id="image">
+    <button id="upld" onclick="uploadImage()" type="button">Upload Image</button><br>
+    Funding agency type<select id="fatype">
+        <option value="select" selected disabled>Select one</option>
+        <option value="gov">Government</option>
+        <option value="gov-aid">Government-Aided</option>
+        <option value="pri">Private</option>
+      </select>    
+    <label >Name of the Organisation</label><br />
+        <input class="name" type="text" id="Oname" required /><br />
+        <label >Year of Establishment</label><br />
+        <input class="established" type="text" id="Eyear" required /><br />
+        <label >Founder Name</label><br />
+        <input class="name" type="text" id="Fname" required /><br />        
+        <label >Phone number</label><br />
+        <input class="links" type="tel" id="phone" required /><br />
+        <label >Portfolio</label><br />
+        <input class="state" type="link" id="portfolio" required /><br />
+        <label >social</label><br />
+        <input class="district" type="link" id="link" required /><br />
+        <label >State</label><br />
+        <input class="pincode" type="text" id="state" required /><br />
+        <label >District</label><br />
+        <input class="location" type="text" id="district" required /><br />
+        <label >Pincode</label><br />
+        <input class="pincode" type="text" id="pincode" required /><br />
+        Declaration Document:<input type="file"  id="dec">
+    <button id="upld" onclick="uploadFile()" type="button">Upload File</button><br>
+        <button type="button" id="sub" onclick="updateFAProfile()">Submit</button>
+    </form>
+
+    <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase.js"></script>
+    <script src= "https://www.gstatic.com/firebasejs/7.7.0/firebase-app.js"></script>
+<script src= "https://www.gstatic.com/firebasejs/7.7.0/firebase-auth.js"></script> 
+<script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-storage.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-database.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-firestore.js"></script>
+ 
+ <script type="module">
+
+var oname = document.getElementById("Oname")
+   var ename = document.getElementById("Eyear")
+   var fname = document.getElementById("Fname")
+   var phone = document.getElementById("phone")
+   var portfolio = document.getElementById("portfolio")
+   var social = document.getElementById("link")
+   var state = document.getElementById("state")
+   var district = document.getElementById("district")
+   var pincode = document.getElementById("pincode")
+
+   var sub=document.getElementById("sub")
+   
+  
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.9.1/firebase-app.js";
+    import { getFirestore } from "https://www.gstatic.com/firebasejs/9.9.1/firebase-firestore.js";
+  
+    const firebaseConfig = {
+  
+        apiKey: "AIzaSyCYybtuNQHaMpcKNdTyjK_e0Y0k5xChMQI",
+
+authDomain: "mgpa-6cc10.firebaseapp.com",
+
+databaseURL: "https://mgpa-6cc10-default-rtdb.firebaseio.com",
+
+projectId: "mgpa-6cc10",
+
+storageBucket: "mgpa-6cc10.appspot.com",
+
+messagingSenderId: "292918906000",
+
+appId: "1:292918906000:web:69bf0126437f9ea2abdc15"
+
+  
+    };
+  
+    const app = initializeApp(firebaseConfig);    
+
+    import { getDatabase, ref, get, set, child, update, remove } from "https://www.gstatic.com/firebasejs/9.9.1/firebase-database.js";
+     
+    const db = getDatabase();    
+   
+    var uuid = localStorage.getItem('currentUser')    
+    
+sub.addEventListener('click',InsertData)
+
+    function InsertData(){
+        set(ref(db, "FAProfile/"+ uuid),{
+            
+            Category:"Funding Agency",
+            Orgname:oname.value,
+            Eyear:Eyear.value,
+            Founder:Fname.value,
+            Phone:phone.value,
+            Portfolio:portfolio.value,
+            Link:social.value,
+            State:state.value,
+            District:district.value,
+            Pincode:pincode.value
+
+        })
+        .then(()=>{
+                alert("data stored successfully")
+                window.location="evaluation.html"
+        })
+        .catch((error)=>{
+            alert("couldn't store the data due to "+error)
+        });
+    }
+
+    function SelectData(){
+        const dbref = ref(db);
+
+        get(child(dbref,"FAProfile/"+ uuid)).then((snapshot)=>{
+            if(snapshot.exists()){
+                
+                oname.value=snapshot.val().Orgname;
+                Eyear.value=snapshot.val().Eyear;
+                Fname.value=snapshot.val().Founder;
+                phone.value=snapshot.val().Phone;
+                portfolio.value=snapshot.val().Portfolio;
+                social.value=snapshot.val().Link;
+                state.value=snapshot.val().State;
+                district.value=snapshot.val().District;
+                pincode.value=snapshot.val().Pincode;
+            }
+            else{
+                alert("no data found")
+            }
+        })
+        .catch((error)=>{
+            alert(error)
+        });
+    }
+
+    
+</script>
+<script>
+    var Config = {
+  
+      apiKey: "AIzaSyCYybtuNQHaMpcKNdTyjK_e0Y0k5xChMQI",
+
+authDomain: "mgpa-6cc10.firebaseapp.com",
+
+databaseURL: "https://mgpa-6cc10-default-rtdb.firebaseio.com",
+
+projectId: "mgpa-6cc10",
+
+storageBucket: "mgpa-6cc10.appspot.com",
+
+messagingSenderId: "292918906000",
+
+appId: "1:292918906000:web:69bf0126437f9ea2abdc15"
+    };
+  
+  
+    // Initialize Firebase
+  
+    firebase.initializeApp(Config);
+    console.log(firebase);
+    const fire = firebase.firestore();
+
+    var uuid = localStorage.getItem('currentUser')
+
+var imgName, imgUrl,brocUrl,decUrl;
+var files=[];
+var reader;
+
+ function updateFAProfile(){
+    fire.collection("FAProfile").doc(uuid).set({
+        Category:"Funding Agency",
+            Orgname:Oname.value,
+            Eyear:Eyear.value,
+            Founder:Fname.value,
+            Phone:phone.value,
+            Portfolio:portfolio.value,
+            Link:link.value,
+            State:state.value,
+            District:district.value,
+            Pincode:pincode.value
+})
+.then(() => {
+    console.log("Document successfully written!");
+})
+.catch((error) => {
+    console.error("Error writing document: ", error);
+});
+}
+
+    function uploadImage() {
+        const ref = firebase.storage().ref();
+        const imagesRef= ref.child('profiles');
+const file = document.querySelector("#photo").files[0];
+const name = +new Date() + "-" + file.name;
+console.log(uuid)
+const metadata = {
+contentType: file.type
+};
+const task = imagesRef.child(uuid).put(file, metadata);
+task
+.then(snapshot => snapshot.ref.getDownloadURL())
+.then(function(url) {
+  imgUrl = url;
+
+  firebase.database().ref('FAFiles/ProfilePics/'+uuid).set({
+    profilePic:imgUrl
+  });
+  alert("image uploaded successfully")
+  const image = document.querySelector("#image")
+  image.src = url;
+})
+.catch(console.error);
+}
+function retrieveImage(){
+
+firebase.database().ref('FAProfilePics/'+ uuid).on('value',function(snapshot){
+    document.getElementById('image').src= snapshot.val().profilePic;
+});
+}
+
+function uploadFile() {
+        const ref = firebase.storage().ref();
+        const fileRef= ref.child('Declaration');
+const file1 = document.querySelector("#dec").files[0];
+const name1 = +new Date() + "-" + file1.name;
+console.log(uuid)
+const metadata1 = {
+contentType: file1.type
+};
+const task = fileRef.child(uuid).put(file1, metadata1);
+task
+.then(snapshot => snapshot.ref.getDownloadURL())
+.then(function(url) {
+  decUrl = url;
+
+  firebase.database().ref('FAFiles/Declaration Forms/'+uuid).set({
+    decForm:decUrl
+  });
+})
+alert("file uploaded successfully")
+.catch(console.error);
+}
+
+
+</script>
+        
+</body>
+
+</html>
