@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apply Now</title>
+</head>
+<body>
+    <form>
+       Problem Statement:<input type="text" id="ps">
+       Description<input type="text" id="desc">
+       Expected Duration:<input type="text" id="dur">
+       Expected Budget:<input type="text" id="bud"><br>
+       Milestone:<input type="text" id="mile"><br>
+        Duration:<input type="text" id="dura"><br>
+        Budget:<input type="text" id="bud">
+        <div id="newElementId"></div>
+        <button type="button" id="addnew" onclick="addText()">Add row</button>
+        <table>
+            <thead>
+                <th>Category</th>
+                <th>Amount</th>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+        <input type="file" id="proposal">
+        <button type="submit" onclick="getData()"></button>
+    </form>
+
+    <script>
+        var sno=0;
+        function addText(){
+            var now=++sno;
+            var newInput1 = document.createElement('div')
+            var newInput2 = document.createElement('div')
+            var newInput3 = document.createElement('div')
+            console.log(now)
+            newInput1.innerHTML = "Milestone:<input type='text' id='milestone+(now)'>";
+            newInput2.innerHTML = "Duration:<input type='text' id='duration+(now)'>";
+            newInput3.innerHTML = "Deliverable: <input type='text' id='deliverable+(now)'>";
+            document.getElementById("newElementId").appendChild(newInput1)
+            document.getElementById("newElementId").appendChild(newInput2)
+            document.getElementById("newElementId").appendChild(newInput3)
+            
+        }
+        console.log(document.getElementById("newElementId").length);
+    </script>
+</body>
+</html>

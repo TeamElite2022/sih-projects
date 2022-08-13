@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firestore fetchHEI</title>
+</head>
+<body>
+    <a href="AcceptHEI.html">Accept a user?</a><br>
+    <a href="RejectHEI.html">Reject a user?</a>
+    <nav class="khu">
+        <ul>
+            <li><a href="fetchfirestoreHEI.html">hei</a></li>
+            <li><a href="fetchfirestoreFA.html">FA</a></li>
+        </ul>
+    </nav>
+    <p>Welcome User, feeling good?</p>
+
+    <form id="getUsers">
+
+        <ul id="list">
+    
+        </ul>
+    </form>
+    <script type="module">
+
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.9.1/firebase-app.js";
+        import { getAuth } from "https://www.gstatic.com/firebasejs/9.9.1/firebase-auth.js";
+        import { getFirestore, collection, getDocs, getDoc, doc,onSnapshot, setDoc, updateDoc} from "https://www.gstatic.com/firebasejs/9.9.1/firebase-firestore.js";
+
+        const firebaseConfig={
+        apiKey: "AIzaSyCYybtuNQHaMpcKNdTyjK_e0Y0k5xChMQI",
+
+    authDomain: "mgpa-6cc10.firebaseapp.com",
+
+    databaseURL: "https://mgpa-6cc10-default-rtdb.firebaseio.com",
+
+    projectId: "mgpa-6cc10",
+
+    storageBucket: "mgpa-6cc10.appspot.com",
+
+    messagingSenderId: "292918906000",
+
+    appId: "1:292918906000:web:69bf0126437f9ea2abdc15"
+        };
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        var stdNo=0;
+
+
+        function GetAllDataRealtime(){
+            const dbRef = collection(db, "HEIProfile");
+           try {
+            onSnapshot(dbRef,(querySnapshot)=>{
+                    var details=[];
+                    querySnapshot.forEach((doc) => {
+                        details.push(doc.data());
+                        console.log(doc.data())
+                        getItemstoList(doc); 
+                    });
+                    
+                })
+           } catch (error) {
+            console.log(error)
+           }
+
+        }
+
+        function getItemstoList(doc){
+
+            
+            const list= document.getElementById('list')
+           
+           var header = document.createElement('li'); 
+           var logoUrl = document.createElement('img')
+           logoUrl.setAttribute("width", "200");
+           logoUrl.setAttribute("height", "200");
+           logoUrl.setAttribute("alt", "Logo"); 
+           logoUrl.setAttribute("title", "College Logo"); 
+           var ColCategory = document.createElement('li');  
+           var HEIname = document.createElement('li');  
+           var EYear = document.createElement('li');  
+           var Principal = document.createElement('li');  
+           var PhoneNo = document.createElement('li');
+           var code = document.createElement('li');  
+           var state = document.createElement('li');  
+           var district = document.createElement('li');  
+           var pincode = document.createElement('li');  
+           var Portfolio = document.createElement('li'); 
+           var social = document.createElement('li');  
+           var Brochure= document.createElement('a');
+           var bro = document.createElement('li');
+           var uid= document.createElement('li')  
+
+           var accept = document.createElement('button')
+           var reject = document.createElement('button')           
+
+    uid.textContent="UserID: "+doc.data().UID
+    logoUrl.setAttribute("src", doc.data().logoUrl);
+    bro.textContent= "brochure:"+doc.data().Brochure
+    Brochure.setAttribute("href",bro)
+    Brochure.setAttribute('download',Brochure);
+    ColCategory.textContent= "Category: "+doc.data().ColCategory
+    HEIname.textContent= "Institution Name: "+doc.data().HEIname
+    EYear.textContent= "Established Year: "+doc.data().EYear
+    Principal.textContent= "Principal Name: "+ doc.data().Principal
+    PhoneNo.textContent= "Phone Number: "+doc.data().PhoneNo
+    code.textContent="College code:"+doc.data().code
+    state.textContent= "State: "+doc.data().state
+    district.textContent= "District: "+doc.data().district
+    pincode.textContent= "Pincode: "+doc.data().pincode
+    Portfolio.textContent= "Portfolio: "+doc.data().Portfolio
+    social.textContent= "Link: "+doc.data().social
+    accept.textContent="Accept"
+    reject.textContent="Decline"
+
+            header.appendChild(uid)
+            header.appendChild(logoUrl)
+            header.appendChild(bro)
+            header.appendChild(Brochure)
+            header.appendChild(ColCategory)
+            header.appendChild(HEIname)
+           
+            header.appendChild(EYear)
+            header.appendChild(Principal)
+            header.appendChild(PhoneNo)
+            header.appendChild(code)
+            header.appendChild(state)
+            header.appendChild(district)
+            header.appendChild(pincode)
+            header.appendChild(Portfolio)
+            header.appendChild(social)
+            header.appendChild(accept)
+            header.appendChild(reject)
+
+            list.appendChild(header)
+            
+            accept.addEventListener('click',acceptUser)
+            reject.onclick = function(){
+                
+                var reason = prompt("Enter the reason for declining:")
+            };       
+
+        }
+
+        async function acceptUser(){
+            var uuid = localStorage.getItem('currentUser')
+    await updateDoc(doc(db,"HEIProfile",uuid),{
+        Status:"Accepted"       
+})
+.then(() => {
+alert("status changed successfully");
+})
+.catch((error) => {
+console.error("Error writing document: ", error);
+});
+        }
+
+        function rejectUser(){
+            const list= document.getElementById('list')
+            var header = document.createElement('li');  
+            
+            var reason = document.createElement('textarea');
+
+            header.appendChild(reason)
+            list.appendChild(header)
+
+        }
+       
+        window.onload = GetAllDataRealtime;
+    </script>
+</body>
+</html>

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firestore fetch</title>
+</head>
+<body>
+    <p>Welcome User, feeling good?</p>
+    <form id="getUsers">
+
+        <ul id="list">
+    
+        </ul>
+    </form>
+    <script type="module">
+
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.9.1/firebase-app.js";
+        import { getAuth } from "https://www.gstatic.com/firebasejs/9.9.1/firebase-auth.js";
+        import { getFirestore, collection, getDocs, getDoc, doc,onSnapshot, setDoc, updateDoc} from "https://www.gstatic.com/firebasejs/9.9.1/firebase-firestore.js";
+
+        const firebaseConfig={
+        apiKey: "AIzaSyCYybtuNQHaMpcKNdTyjK_e0Y0k5xChMQI",
+
+    authDomain: "mgpa-6cc10.firebaseapp.com",
+
+    databaseURL: "https://mgpa-6cc10-default-rtdb.firebaseio.com",
+
+    projectId: "mgpa-6cc10",
+
+    storageBucket: "mgpa-6cc10.appspot.com",
+
+    messagingSenderId: "292918906000",
+
+    appId: "1:292918906000:web:69bf0126437f9ea2abdc15"
+        };
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        var stdNo=0;
+
+
+        function GetAllDataRealtime(){
+            const dbRef = collection(db, "FAProfile");
+           try {
+            onSnapshot(dbRef,(querySnapshot)=>{
+                    var details=[];
+                    querySnapshot.forEach((doc) => {
+                        details.push(doc.data());
+                        console.log(doc.data())
+                        getItemstoList(doc); 
+                    });
+                    
+                })
+           } catch (error) {
+            console.log(error)
+           }
+
+        }
+
+        function getItemstoList(doc){
+
+            
+            const list= document.getElementById('list')
+           
+           var header = document.createElement('li');  
+           var Category = document.createElement('li');  
+           var Orgname = document.createElement('li');  
+           var EYear = document.createElement('li');  
+           var FName = document.createElement('li');  
+           var PhNumber = document.createElement('li');  
+           var State = document.createElement('li');  
+           var District = document.createElement('li');  
+           var Pincode = document.createElement('li');  
+           var Portfolio = document.createElement('li');  
+           var link = document.createElement('li');
+           var uid= document.createElement('li')  
+
+           var accept = document.createElement('button')
+           var reject = document.createElement('button')           
+
+    uid.textContent="UserID: "+doc.data().UID
+    Category.textContent= "Category: "+doc.data().Category
+    Orgname.textContent= "Organisation name: "+doc.data().Orgname
+    EYear.textContent= "Established Year: "+doc.data().Eyear
+    FName.textContent= "Founder Name: "+ doc.data().Founder
+    PhNumber.textContent= "Phone Number: "+doc.data().Phone
+    State.textContent= "State: "+doc.data().State
+    District.textContent= "District: "+doc.data().District
+    Pincode.textContent= "Pincode: "+doc.data().Pincode
+    Portfolio.textContent= "Portfolio: "+doc.data().Portfolio
+    link.textContent= "Link: "+doc.data().Link
+    accept.textContent="Accept"
+    reject.textContent="Decline"
+
+            header.appendChild(uid)
+            header.appendChild(Category)
+            header.appendChild(Orgname)
+            header.appendChild(EYear)
+            header.appendChild(FName)
+            header.appendChild(PhNumber)
+            header.appendChild(State)
+            header.appendChild(District)
+            header.appendChild(Pincode)
+            header.appendChild(Portfolio)
+            header.appendChild(link)
+            header.appendChild(accept)
+            header.appendChild(reject)
+
+            list.appendChild(header)
+            
+            accept.addEventListener('click',acceptUser)
+            reject.onclick = function(){
+                
+                var reason = prompt("Enter the reason for declining:")
+            };       
+
+        }
+
+        async function acceptUser(){
+            var uuid = localStorage.getItem('currentUser')
+    await updateDoc(doc(db,"FAProfile",uuid),{
+        Status:"Accepted"       
+})
+.then(() => {
+alert("status changed successfully");
+})
+.catch((error) => {
+console.error("Error writing document: ", error);
+});
+        }
+
+        function rejectUser(){
+            const list= document.getElementById('list')
+            var header = document.createElement('li');  
+            
+            var reason = document.createElement('textarea');
+
+            header.appendChild(reason)
+            list.appendChild(header)
+
+        }
+       
+        window.onload = GetAllDataRealtime;
+    </script>
+</body>
+</html>

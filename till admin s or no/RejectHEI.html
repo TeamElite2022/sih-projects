@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reject User</title>
+</head>
+<body>
+    <form>
+        Re-enter the UserID of the accountholder<br>
+        <input type="text" id="uid" placeholder="Eg:tA2uViw........"/><br>
+        <button type="button" id="insBtn">Enter</button><br><br><br><br><br><br><br><br>
+        <ul id="list">
+            
+        </ul>
+    </form>
+   
+    <script type="module">
+  
+        var uid=document.getElementById("uid")
+        var insBtn=document.getElementById("insBtn")
+        insBtn.addEventListener('click',showData);
+
+
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.9.1/firebase-app.js";
+      
+        const firebaseConfig = {
+      
+            apiKey: "AIzaSyCYybtuNQHaMpcKNdTyjK_e0Y0k5xChMQI",
+    
+    authDomain: "mgpa-6cc10.firebaseapp.com",
+    
+    databaseURL: "https://mgpa-6cc10-default-rtdb.firebaseio.com",
+    
+    projectId: "mgpa-6cc10",
+    
+    storageBucket: "mgpa-6cc10.appspot.com",
+    
+    messagingSenderId: "292918906000",
+    
+    appId: "1:292918906000:web:69bf0126437f9ea2abdc15"
+    
+      
+        };  
+      
+        // Initialize Firebase
+      
+        const app = initializeApp(firebaseConfig);    
+    
+        import { getFirestore, collection, getDocs, getDoc, doc,onSnapshot, setDoc, updateDoc} from "https://www.gstatic.com/firebasejs/9.9.1/firebase-firestore.js";
+    
+        const db = getFirestore();
+
+            var  details=[]
+            //-----------ALWAYS REMEMBER THIS FUCKING THING THAT ALWAYS SCREWS YOU UP-------------
+            const test=JSON.stringify(uid.value)
+
+        async function showData(){
+            console.log(test)          
+            const dbRef = doc(db, "HEIProfile",test);
+           const docRef= await getDoc(dbRef)          
+           if (docRef.exists()) {
+              console.log("exists")
+            details.push(docRef.data())
+            console.log(details)
+            getItemstoList(docRef); 
+            }
+            else{
+              console.log("Please check the UserID entered")            
+          }
+          
+        }
+           
+            function getItemstoList(docRef){
+
+                const list= document.getElementById('list')
+
+                var header = document.createElement('li'); 
+                var logoUrl = document.createElement('img')
+                logoUrl.setAttribute("width", "200");
+                logoUrl.setAttribute("height", "200");
+                logoUrl.setAttribute("alt", "Logo"); 
+                logoUrl.setAttribute("title", "College Logo"); 
+                var ColCategory = document.createElement('li');  
+                var HEIname = document.createElement('li');  
+                var EYear = document.createElement('li');  
+                var Principal = document.createElement('li');  
+                var PhoneNo = document.createElement('li');
+                var code = document.createElement('li');  
+                var state = document.createElement('li');  
+                var district = document.createElement('li');  
+                var pincode = document.createElement('li');  
+                var Portfolio = document.createElement('li'); 
+                var social = document.createElement('li');  
+                var Brochure= document.createElement('a');
+                var bro = document.createElement('li');
+                var Uid= document.createElement('li');
+                var Reject = document.createElement('button')   
+
+                Uid.textContent="UserID: "+docRef.data().UID
+                logoUrl.setAttribute("src", docRef.data().logoUrl);
+                bro.textContent= "brochure:"+docRef.data().Brochure
+                Brochure.setAttribute("href",bro)
+                Brochure.setAttribute('download',Brochure);
+                ColCategory.textContent= "Category: "+docRef.data().ColCategory
+                HEIname.textContent= "Institution Name: "+docRef.data().HEIname
+                EYear.textContent= "Established Year: "+docRef.data().EYear
+                Principal.textContent= "Principal Name: "+ docRef.data().Principal
+                PhoneNo.textContent= "Phone Number: "+docRef.data().PhoneNo
+                code.textContent="College code:"+docRef.data().code
+                state.textContent= "State: "+docRef.data().state
+                district.textContent= "District: "+docRef.data().district
+                pincode.textContent= "Pincode: "+docRef.data().pincode
+                Portfolio.textContent= "Portfolio: "+docRef.data().Portfolio
+                social.textContent= "Link: "+docRef.data().social
+                Reject.textContent="Reject"
+
+                header.appendChild(Uid)
+                header.appendChild(logoUrl)
+                header.appendChild(bro)
+                header.appendChild(Brochure)
+                header.appendChild(ColCategory)
+                header.appendChild(HEIname)
+                header.appendChild(EYear)
+                header.appendChild(Principal)
+                header.appendChild(PhoneNo)
+                header.appendChild(code)
+                header.appendChild(state)
+                header.appendChild(district)
+                header.appendChild(pincode)
+                header.appendChild(Portfolio)
+                header.appendChild(social)
+                header.appendChild(Reject)
+                
+                Reject.addEventListener('click',RejectUser)
+
+                list.appendChild(header)     
+
+                }
+
+              async function RejectUser(){
+                const upRef = doc(db, "HEIProfile", test);
+
+                    // Set the "capital" field of the city 'DC'
+                await updateDoc(upRef, {
+                  Status:"Rejected"
+                });
+                alert("status updated")
+              }
+
+        </script>
+</body>
+</html>

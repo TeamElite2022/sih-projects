@@ -1,0 +1,53 @@
+body{
+    background-image:url('data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxISEhUSEhMVFRUXFRcVFxUXFRcXFxcXFRcXFxcXFxcYHSggGBolHRUXITEhJSkrLi4uFx8zODMtNygtLisBCgoKDg0OGhAQGi0lHx0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLSstLS0tLS0tLTctLS0tLS0tNzctLS03Lf/AABEIAMIBAwMBIgACEQEDEQH/xAAYAAEBAQEBAAAAAAAAAAAAAAABAAIGA//EACEQAQEBAAEEAwEBAQAAAAAAAAABEQISIVFhMUFx8MGB/8QAGQEBAQEAAwAAAAAAAAAAAAAAAAECAwYH/8QAGxEBAQEBAQEBAQAAAAAAAAAAABEBITFBcQL/2gAMAwEAAhEDEQA/AOKlOrF0R6V11lUcSJxiDWMzsR1ewN9LL4VUqgjQsiiCSEioaewsV4irIpBDEBTDYFFYJ2PUdIDsYzVvpKQ6cFAGRQRAVyiixQUqiVArVgq6NQLUVFe4nI53SKrRKdgAymwaLqjV4symGxASKxYgVgNq6oC6UlYCsWLECsENiIDD0pEFipgVCEQEqsV4pFGGxSkgJVRatKHTowKNYmd/sJUmpT2hiKUCUDWixYvgqtxUpAGQDVCrErEFFRDbVEsGmJRSrjVaqoqKZTiQoUF4mAKYrcSg02qRIJJTkolYsWADUgWoEpEolYIlYqpUVYP1adBbohAHToFqiplQTwMMZK0W/o0w1AWyiQ9lKorVqUsBVcZ9IVNDhgSoLCqEVY1oGA1mjpQtBqwRSjitCkiCqnKrCAVkGrUpGqsGalDoUGA0sABrBqlUEFrUFikFEaHSIgZPAsNlh+QHFVXilFKupRWICTyrxVMoKm0LFFqvJWjTQqLRoNSBLpBITkUpFqisEA7+KqpUGFEVmHUIgSP1RUWpJFWmM6pfK0MlVilRwMZwyrkmmJHfIxRLqS7AWa1MQgwYb2VqequNVgO1QYqTUgzORhxm8TuAvEmI4dPSyTSA6vQ1pKM4VakELCcUZxNSjlEKrBKcNgBCU1QYuk8RiQKl+lILyA2DDKaoyYpVqAxZnwTpAKH5Z6f1Q4hfLXKIAYmlGda1nFmINYlOSVANIRUrrVEtNCzFCCo7mU2AyULVCpRUUNqEh2gosEplTAwIxcRnlGtCzwiiG4MMh0WgyRAjGTIosMGrPADVrQxOivcS+TmKwFUkCVWqqFM6ZCkV5GXRFToKtKiQEp1U6oDgq0FilXVFU/A4zflWEDeLN4rfJOaIGVKGVlH6SitUUqsUViUGAfkb/RHq9IDSuVUUWnqZsVSjWRLA0iQxS1lVaUun8Bd0pTYA+FQQBuKwYBwGVUF2UQwGkIFGuwkV4wINYmdOLQ9mTKpQBViBRCGxBQ9mdRSNaLx8CmUFqlSsVFOKMqOHRpgxYCqlGezIKrxWhrUB1LrIXoohhgKxarEgtOCjuC6cOqX6WgJGtFU5eQSF9EwXIU0kGTIqAKPGiAtF5ejpAWLp1KUArCiA2JE6cQ0xKKg2LBBpNmiRIqhsF4qclElYMBdypUCUWqUFDRYRBPhSLFZEVcoJ7hwGhuAi8QNSgA3VL5Uv0sAs41IF0SsGmQEpfK0YCv6ikgoKUumGipIDkxySY/v1cbhSciNcGUhEzfn/AIkzq43wXIJvU+iGpJgqkgSSNXFP8PD5SEPj9ECX6HQkKokkRv6efH7/AFI31cHH7aSTDTEk0j//2Q==');
+    background-repeat: no-repeat;
+    background-size:cover;
+    height:100%;
+    width:100%;
+    letter-spacing: 1px;
+    line-height: 2;
+    margin-top:5%;
+   
+    }
+
+.row{
+    background-color:white;
+    width:75%;
+    margin:auto;
+    vertical-align: middle;
+    border-radius: 30px;
+}
+
+.column {
+    float: left;
+    width: 50%;
+    
+  }
+  
+  /* Clear floats after the columns */
+  .row:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+
+  #right{
+    background-color: aqua;
+    width:50%;
+  padding-top:50px;
+  padding-bottom:20%;
+  text-align:center;
+  border-top-right-radius: 30px;
+  border-bottom-right-radius: 30px;
+  }
+
+  #left{
+    background-color:green;
+    padding-bottom:10px;
+    border-top-left-radius: 30px;
+    border-bottom-left-radius: 30px;
+  }
+
+  body{
+    border-radius: 30px;
+  }

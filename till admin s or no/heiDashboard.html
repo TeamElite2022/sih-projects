@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HEI Dashboard</title>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="heiProfile.html">Profile</a></li>
+            <li><a href="appliedpro.html">Applied Projects</a></li>
+            <li><a href="ongngpro.html">Ongoing Projects</a></li>
+            <li><a href="completedpro.html">Completed Projects</a></li>
+            <li><a href="awardedpro.html">Awarded Projects</a></li>
+            <li><a href="bankdetails.html">Bank details</a></li>
+        </ul>
+    </nav>
+
+<p>Welcome user, feeling lucky?</p>
+<form id="Itemget">
+
+    <ul id="list">
+
+    </ul>
+</form>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.9.1/firebase-app.js";
+    import { getDatabase, ref, get, set, child, update, remove } from "https://www.gstatic.com/firebasejs/9.9.1/firebase-database.js";
+import { getFirestore, collection, doc, setDoc, onSnapshot, updateDoc } from "https://www.gstatic.com/firebasejs/9.9.1/firebase-firestore.js";
+
+// TODO: Replace the following with your app's Firebase project configuration
+// See: https://firebase.google.com/docs/web/learn-more#config-object
+const firebaseConfig = {
+    // ...
+    apiKey: "AIzaSyCYybtuNQHaMpcKNdTyjK_e0Y0k5xChMQI",
+
+authDomain: "mgpa-6cc10.firebaseapp.com",
+
+databaseURL: "https://mgpa-6cc10-default-rtdb.firebaseio.com",
+
+projectId: "mgpa-6cc10",
+
+storageBucket: "mgpa-6cc10.appspot.com",
+
+messagingSenderId: "292918906000",
+
+appId: "1:292918906000:web:69bf0126437f9ea2abdc15"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const db= getDatabase();
+// Initialize Cloud Firestore and get a reference to the service
+const fire = getFirestore(app);
+var uuid = localStorage.getItem('currentUser')
+
+
+        function GetAllDataRealtime(){
+           const dbRef = collection(fire, "FaPosts");
+           try {
+            onSnapshot(dbRef,(querySnapshot)=>{
+                    var details=[];
+                    querySnapshot.forEach((doc) => {
+                        details.push(doc.data());
+                        console.log(doc.data())
+                        getIteminList(doc); 
+                    });
+                    
+                })
+           } catch (error) {
+            console.log(error)
+           }
+                
+
+        }
+
+        function getIteminList(doc){
+            const list= document.getElementById('list')
+           
+            var header = document.createElement('li');  
+        var Budget = document.createElement('li');
+    var Deadline = document.createElement('li');
+    var Deliverables = document.createElement('li');
+    var Description = document.createElement('li');
+    var Duration = document.createElement('li');
+    var Eligibility = document.createElement('li');
+    var ProbStmt = document.createElement('li');
+    var request = document.createElement('button')
+
+    header.setAttribute('data-id',doc.id)
+    Budget.textContent= "Budget: "+doc.data().Budget
+    Deadline.textContent= "Deadline: "+doc.data().Deadline
+    Deliverables.textContent= "Deliverables: "+doc.data().Deliverables
+    Description.textContent= "Description: "+ doc.data().Description
+    Duration.textContent= "Duration: "+doc.data().Duration
+    Eligibility.textContent= "Eligibility: "+doc.data().Eligibility
+    ProbStmt.textContent= "ProbStmt: "+doc.data().ProbStmt
+    request.textContent="Apply now"
+
+    header.appendChild(Budget)
+    header.appendChild(Deadline)
+    header.appendChild(Deliverables)
+    header.appendChild(Description)
+    header.appendChild(Duration)
+    header.appendChild(Eligibility)
+    header.appendChild(ProbStmt)
+    header.appendChild(request)
+    
+
+            try {
+                request.addEventListener('click',albox);
+            } catch (error) {
+                console.log(error)
+            }
+    
+    
+
+
+    list.appendChild(header)
+        }
+       
+       
+        window.onload = GetAllDataRealtime;
+
+</script>
+
+
+</body>
+</html>
