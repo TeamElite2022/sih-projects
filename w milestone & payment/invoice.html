@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice page</title>
+</head>
+<body>
+    <p>Enter the amount as you post</p>
+    <button id="upload" type="button" >Upload a Bill</button>
+    <div id="files">
+
+    </div>
+    <button type="button" id="sub">Submit</button>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.9.1/firebase-app.js";
+        import { getStorage,uploadBytes, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.9.1/firebase-storage.js";
+        import { getFirestore, collection, getDocs, getDoc, doc,onSnapshot, setDoc, updateDoc} from "https://www.gstatic.com/firebasejs/9.9.1/firebase-firestore.js";
+var firebaseConfig = {
+    apiKey: "AIzaSyCYybtuNQHaMpcKNdTyjK_e0Y0k5xChMQI",
+
+  authDomain: "mgpa-6cc10.firebaseapp.com",
+
+  projectId: "mgpa-6cc10",
+
+  storageBucket: "mgpa-6cc10.appspot.com",
+
+  messagingSenderId: "292918906000",
+
+  appId: "1:292918906000:web:69bf0126437f9ea2abdc15"
+
+  };
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const fire=getFirestore(app)
+  const storage = getStorage(app);
+  var sno=0,now1,now2;
+
+  var upl=document.getElementById('upload')
+  upl.addEventListener('click',uploadBill)
+  var sub=document.getElementById('sub')
+  sub.addEventListener('click',sendtoDB)
+  async function uploadBill(){
+    now1=++sno;
+    now2=++sno;
+   
+    var inp=document.createElement('input')
+    inp.setAttribute("id",now1)
+    inp.setAttribute("type","number")
+    inp.setAttribute('required', '')
+    inp.setAttribute("name","inputAmount")
+    var fil=document.createElement('input')
+    fil.setAttribute("id",now2)
+    fil.setAttribute("type","file")
+    fil.setAttribute("name","fileInput")
+    fil.setAttribute('required', '')
+
+    document.getElementById('files').appendChild(inp)
+    document.getElementById('files').appendChild(fil)
+
+  }
+
+  async function sendtoDB(){
+    var sum=0;
+    var ar=document.getElementsByName('inputAmount')
+    console.log(typeof ar)
+    for(let i=0;i<ar.length;i++){
+        var a=parseInt(ar[i].value)
+       sum+=a 
+       
+    }
+
+    const docRef = doc(fire, "FaFund", "User1");
+const docSnap = await getDoc(docRef);
+
+if (docSnap.exists()) {
+  console.log("Document data:", docSnap.data());
+  var amount1=docSnap.data().Amount
+} else {
+  console.log("No such document!");
+}
+ var left=amount1-sum
+    await setDoc(doc(fire,"FaFund","User1"),{        
+       LeftAmount:left
+        },{merge:true})
+        .then(() => {
+        console.log("status changed successfully");
+        })
+        .catch((error) => {
+        console.error(error);
+        });
+
+        const imageRef = ref(storage, 'invoices/');
+        uploadBytes(imageRef, file, metadata)
+  .then((snapshot) => {
+    console.log('Uploaded', snapshot.totalBytes, 'bytes.');
+    console.log('File metadata:', snapshot.metadata);
+    
+    getDownloadURL(snapshot.ref).then((url) => {
+      console.log('File available at', url);
+      // ...
+    });
+  }).catch((error) => {
+    console.log('Upload failed', error);
+    // ...
+  });
+  }
+        </script>
+</body>
+</html>

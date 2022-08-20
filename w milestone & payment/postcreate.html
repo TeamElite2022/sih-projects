@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post | Create</title>
+</head>
+<body>
+    <form >
+        PSID:<input type="text" id="psid">
+        Problem Statement:<input type="text" id="ps">
+        Description:<textarea  cols="40" id="desc"></textarea>
+        Budget:<input type="text" id="budget">
+        Duration:<input type="text" id="duration">
+        Deadline to apply:<input type="date" id="deadline">
+        Eligibility:<textarea  cols="40" id="eligibility"></textarea>
+        Deliverables:<textarea cols="40" id="deliver"></textarea>
+        Document<input type="file" id="doc">
+        <button type="button" id="post" onclick="createPost()">Post</button>
+    </form>
+
+    <script src= "https://www.gstatic.com/firebasejs/7.7.0/firebase-app.js"></script>
+    <script src= "https://www.gstatic.com/firebasejs/7.7.0/firebase-auth.js"></script> 
+    <script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-storage.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-firestore.js"></script>
+
+<script>
+    var psid=document.getElementById("psid")
+    var ps=document.getElementById("ps")
+    var desc=document.getElementById("desc")
+    var budget=document.getElementById("budget")
+    var dur=document.getElementById("duration")
+    var dl=document.getElementById("deadline")
+    var elig=document.getElementById("eligibility")
+    var deliv=document.getElementById("deliver")
+    var post=document.getElementById("post")
+
+/*import { initializeApp } from "https://www.gstatic.com/firebasejs/9.9.1/firebase-app.js";
+import { getFirestore, collection, addDoc, doc, setDoc } from "https://www.gstatic.com/firebasejs/9.9.1/firebase-firestore.js";*/
+
+// TODO: Replace the following with your app's Firebase project configuration
+// See: https://firebase.google.com/docs/web/learn-more#config-object
+const firebaseConfig = {
+    // ...
+    apiKey: "AIzaSyCYybtuNQHaMpcKNdTyjK_e0Y0k5xChMQI",
+
+authDomain: "mgpa-6cc10.firebaseapp.com",
+
+databaseURL: "https://mgpa-6cc10-default-rtdb.firebaseio.com",
+
+projectId: "mgpa-6cc10",
+
+storageBucket: "mgpa-6cc10.appspot.com",
+
+messagingSenderId: "292918906000",
+
+appId: "1:292918906000:web:69bf0126437f9ea2abdc15"
+};
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+
+// Initialize Cloud Firestore and get a reference to the service
+const fire = firebase.firestore();
+var uuid = localStorage.getItem('currentUser')
+
+ function createPost(){
+    //here I created reference for the path which makes it easy to create subcollections
+    const Ref=fire.collection('FaPosts').doc(uuid).collection(psid.value).doc("number")
+     Ref.set({
+        PSID:psid.value,
+        ProbStmt:ps.value,
+        Description:desc.value,
+        Budget:budget.value,
+        Duration:dur.value,
+        Deadline:dl.value,
+        Eligibility:elig.value,
+        Deliverables:deliv.value,
+        UID:uuid
+       
+})
+.then(() => {
+console.log("Document successfully written!");
+})
+.catch((error) => {
+console.error("Error writing document: ", error);
+});
+}
+
+post.addEventListener('click',createPost);
+
+</script>
+
+
+</body>
+</html>

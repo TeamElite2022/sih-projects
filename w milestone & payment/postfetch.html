@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uploaded Problem statements</title>
+</head>
+<body>
+    <ul id="list">
+
+    </ul>
+    <script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.9.1/firebase-app.js";
+import { getFirestore, collection, getDocs, getDoc, doc,onSnapshot, setDoc, updateDoc} from "https://www.gstatic.com/firebasejs/9.9.1/firebase-firestore.js";
+var firebaseConfig = {
+    apiKey: "AIzaSyCYybtuNQHaMpcKNdTyjK_e0Y0k5xChMQI",
+
+  authDomain: "mgpa-6cc10.firebaseapp.com",
+
+  projectId: "mgpa-6cc10",
+
+  storageBucket: "mgpa-6cc10.appspot.com",
+
+  messagingSenderId: "292918906000",
+
+  appId: "1:292918906000:web:69bf0126437f9ea2abdc15"
+
+  };
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const fire=getFirestore(app)
+
+  var uuid = localStorage.getItem('currentUser')   
+
+  async function getPosts(){
+    const querySnapshot = await getDocs(collection(fire, "FaPosts"));
+querySnapshot.forEach((doc) => {
+  console.log(doc.id, " => ", doc.data());   
+  getItems(doc) ;
+  });
+  }
+
+  function getItems(doc){
+    var list=document.getElementById('list')
+
+    var bud=document.createElement('li')
+    var dead=document.createElement('li')
+    var deli=document.createElement('li')
+    var desc=document.createElement('li')
+    var dur=document.createElement('li')
+    var eli=document.createElement('li')
+    var ps=document.createElement('li')
+
+    bud.textContent="Budget: "+doc.data().Budget
+    dead.textContent="Deadline: "+doc.data().Deadline
+    deli.textContent="Deliverables: "+doc.data().Deliverables
+    desc.textContent="Description: "+doc.data().Description
+    dur.textContent="Duration: "+doc.data().Duration
+    eli.textContent="Eligibility: "+doc.data().Eligibility
+    ps.textContent="ProbStmt: "+doc.data().ProbStmt
+
+    list.appendChild(bud)
+    list.appendChild(dead)
+    list.appendChild(deli)
+    list.appendChild(desc)
+    list.appendChild(dur)
+    list.appendChild(eli)
+    list.appendChild(ps)
+  }
+
+  window.onload=getPosts
+    </script>
+</body>
+</html>

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apply Now</title>
+</head>
+<body>
+    <form>
+        PSID:<input type="text" id="psid"><br>
+       Problem Statement:<input type="text" id="ps"><br>
+       Description<input type="text" id="desc"><br>
+       Expected Duration:<input type="text" id="dur"><br>
+       Expected Budget:<input type="text" id="bud"><br>
+        <table id="tab">
+            <tr id="rowhead">
+                    <th>Milestones</th>
+                    <th>Deliverables</th>
+                    <th>Budget</th>
+                    <th>Duration</th>
+            </tr>         
+            <tr id="rowdata">
+                    <td><input  type="text" id="0" name="milestone" required></td>
+                    <td><input  type="text" id="0" name="deliverable" required></td>               
+                    <td><input  type="text" id="0" name="budget" required></td>                    
+                    <td><input  type="text" id="0" name="duration" required></td>
+            </tr>
+           
+        </table>
+        <button type="button" id="addnew" onclick="addText()">Add row</button>
+        <table id="tab2">
+            <tr>
+                <th>Category</th>
+                <th>Amount</th>
+            </tr>
+            <tr>
+                <td><input type="text" id="0" name="category"></td>
+                <td><input type="text" id="0" name="amount"></td>
+            </tr>
+        </table>
+        <button type="button" id="addnew2" onclick="addText2()">Add row</button><br>
+        Proposal Document:<input type="file" id="proposal"><br>
+        <button type="button" id="upfile">Upload file</button>
+        <button type="button" onclick="getData()">submit</button>
+    </form>
+
+<script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-auth.js"></script> 
+<script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-storage.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-database.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-firestore.js"></script>
+
+    <script>
+
+const firebaseConfig = {
+    apiKey: "AIzaSyCYybtuNQHaMpcKNdTyjK_e0Y0k5xChMQI",
+
+authDomain: "mgpa-6cc10.firebaseapp.com",
+
+databaseURL: "https://mgpa-6cc10-default-rtdb.firebaseio.com",
+
+projectId: "mgpa-6cc10",
+
+storageBucket: "mgpa-6cc10.appspot.com",
+
+messagingSenderId: "292918906000",
+
+appId: "1:292918906000:web:69bf0126437f9ea2abdc15"
+};
+
+firebase.initializeApp(firebaseConfig)
+const fire=firebase.firestore();
+
+        var sno=0,now,mil,dur,del,bud,srno=0,cat,am,next;
+        function addText(){
+             now=++sno;
+             mil=now
+             dur=now
+             del=now
+             bud=now
+
+            var row= document.createElement('tr')
+
+            var newMilestone = document.createElement('td')            
+            var newDuration = document.createElement('td')            
+            var newDeliverable = document.createElement('td')            
+            var newBudget = document.createElement('td')            
+
+            var mile= document.createElement('input')
+            mile.setAttribute('id',mil)
+            mile.setAttribute('name','milestone')
+            var deli = document.createElement('input')
+            deli.setAttribute('id',del)
+            deli.setAttribute('name','deliverable')
+            var budg= document.createElement('input')
+            budg.setAttribute('id',bud)
+            budg.setAttribute('name','budget')
+            var dura = document.createElement('input')
+            dura.setAttribute('id',dur)
+            dura.setAttribute('name','duration')       
+            
+
+            newMilestone.appendChild(mile)
+            newDeliverable.appendChild(deli)
+            newBudget.appendChild(budg)
+            newDuration.appendChild(dura)          
+
+           
+           row.appendChild(newMilestone)
+           row.appendChild(newDeliverable)
+           row.appendChild(newBudget) 
+           row.appendChild(newDuration)
+            
+           
+            document.getElementById("tab").appendChild(row)
+            
+        }
+        
+       function addText2(){
+            next=++srno;
+            cat=next
+            am=next
+
+            var nrow= document.createElement('tr')
+
+            var newCategory= document.createElement('td')
+            var newAmount= document.createElement('td')
+
+            var cate= document.createElement('input')
+            cate.setAttribute('id',cat)
+            cate.setAttribute('name', 'category')
+            var amo=document.createElement('input')
+            amo.setAttribute('id',am)
+            amo.setAttribute('name','amount')
+
+            newCategory.appendChild(cate)
+            newAmount.appendChild(amo)
+
+            nrow.appendChild(newCategory)
+            nrow.appendChild(newAmount)
+
+            document.getElementById("tab2").appendChild(nrow)
+        }      
+        var i;
+        var psid=document.getElementById('psid')
+        var ps = document.getElementById('ps')
+        var desc= document.getElementById('desc')
+        var durat= document.getElementById('dur')
+        var budge= document.getElementById('bud')
+        var milestone= document.getElementsByName('milestone')
+        var deliverable= document.getElementsByName('deliverable')
+        var duration= document.getElementsByName('duration')
+        var budget= document.getElementsByName('budget')
+        
+function getData(){
+   var arrMiles={}
+   var arrDel={}
+   var arrDur={}
+   var arrBud={}
+   for (i=0;i<milestone.length;i++){
+    arrMiles[i]=milestone[i].value
+   }
+   for (i=0;i<deliverable.length;i++){
+    console.log(deliverable[i].value);
+    arrDel[i]=deliverable[i].value
+   }
+   for (i=0;i<duration.length;i++){
+    console.log(duration[i].value);
+    arrDur[i]=duration[i].value
+   }
+   for (i=0;i<budget.length;i++){
+    console.log(budget[i].value);
+    arrBud[i]=budget[i].value
+   }
+
+        fire.collection("apply").doc("three").set({
+            PSID:psid.value,
+            Probstmt:ps.value,
+            description:desc.value,
+            Duration:durat.value,
+            Budget:budge.value,
+            Milestones: arrMiles,
+            Deliverables: arrDel,
+            Duration: arrDur,
+            Budget:arrBud,
+            Status:"To be Verified"
+            
+        }).then(()=> {
+            console.log("successful");
+        }).catch((error)=>{
+            console.log(error);
+        });
+
+    }
+    </script>
+
+    
+</body>
+</html>

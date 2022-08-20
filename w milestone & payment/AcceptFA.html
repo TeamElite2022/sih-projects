@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accept User</title>
+</head>
+<body>
+    <form>
+        Re-enter the UserID of the accountholder<br>
+        <input type="text" id="uid" placeholder="Eg:tA2uViw........"/><br>
+        <button type="button" id="insBtn">Enter</button><br><br><br><br><br><br><br><br>
+        <ul id="list">
+            
+        </ul>
+    </form>
+    <script type="module">
+        var uid=document.getElementById("uid")
+        var insBtn=document.getElementById("insBtn")
+        insBtn.addEventListener('click',showData);
+
+
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.9.1/firebase-app.js";
+      
+        const firebaseConfig = {
+      
+            apiKey: "AIzaSyCYybtuNQHaMpcKNdTyjK_e0Y0k5xChMQI",
+    
+    authDomain: "mgpa-6cc10.firebaseapp.com",
+    
+    databaseURL: "https://mgpa-6cc10-default-rtdb.firebaseio.com",
+    
+    projectId: "mgpa-6cc10",
+    
+    storageBucket: "mgpa-6cc10.appspot.com",
+    
+    messagingSenderId: "292918906000",
+    
+    appId: "1:292918906000:web:69bf0126437f9ea2abdc15"
+    
+      
+        };  
+      
+        // Initialize Firebase
+      
+        const app = initializeApp(firebaseConfig);    
+    
+        import { getFirestore, collection, getDocs, getDoc, doc,onSnapshot, setDoc, updateDoc} from "https://www.gstatic.com/firebasejs/9.9.1/firebase-firestore.js";
+    
+        const db = getFirestore();
+
+            var  details=[]
+            //-----------ALWAYS REMEMBER THIS FUCKING THING THAT ALWAYS SCREWS YOU UP-------------
+            const test=JSON.stringify(uid.value)
+
+            async function showData(){
+            console.log(test)          
+            const dbRef = doc(db, "FAProfile",test);
+           const docRef= await getDoc(dbRef)          
+           if (docRef.exists()) {
+              console.log("exists")
+            details.push(docRef.data())
+            console.log(details)
+            getItemstoList(docRef); 
+            }
+            else{
+              console.log("Please check the UserID entered")            
+          }
+
+          async function getItemstoList(docRef){
+            const list= document.getElementById('list')
+
+                var header = document.createElement('li'); 
+                var logoUrl = document.createElement('img')
+                logoUrl.setAttribute("width", "200");
+                logoUrl.setAttribute("height", "200");
+                logoUrl.setAttribute("alt", "Logo"); 
+                logoUrl.setAttribute("title", "Agency Logo"); 
+                var Category = document.createElement('li');  
+           var Orgname = document.createElement('li');  
+           var EYear = document.createElement('li');  
+           var FName = document.createElement('li');  
+           var PhNumber = document.createElement('li');  
+           var State = document.createElement('li');  
+           var District = document.createElement('li');  
+           var Pincode = document.createElement('li');  
+           var Portfolio = document.createElement('li');  
+           var link = document.createElement('li');
+           var uid= document.createElement('li') 
+           var accept= document.createElement('button')
+
+           uid.textContent="UserID: "+docRef.data().UID
+    logoUrl.setAttribute('src',docRef.data().ProfilePic)
+    Category.textContent= "Category: "+docRef.data().Category
+    Orgname.textContent= "Organisation name: "+docRef.data().Orgname
+    EYear.textContent= "Established Year: "+docRef.data().Eyear
+    FName.textContent= "Founder Name: "+ docRef.data().Founder
+    PhNumber.textContent= "Phone Number: "+docRef.data().Phone
+    State.textContent= "State: "+docRef.data().State
+    District.textContent= "District: "+docRef.data().District
+    Pincode.textContent= "Pincode: "+docRef.data().Pincode
+    Portfolio.textContent= "Portfolio: "+docRef.data().Portfolio
+    link.textContent= "Link: "+docRef.data().Link
+    accept.textContent= "Accept"
+
+            header.appendChild(uid)
+            header.appendChild(logoUrl)
+            header.appendChild(Category)
+            header.appendChild(Orgname)
+            header.appendChild(EYear)
+            header.appendChild(FName)
+            header.appendChild(PhNumber)
+            header.appendChild(State)
+            header.appendChild(District)
+            header.appendChild(Pincode)
+            header.appendChild(Portfolio)
+            header.appendChild(link)
+            header.appendChild(accept)
+
+            list.appendChild(header)
+            accept.addEventListener('click',acceptUser)
+          }
+         
+        }
+
+        async function acceptUser(){
+                const upRef = doc(db, "FAProfile", test);
+
+                    // Set the "capital" field of the city 'DC'
+                await updateDoc(upRef, {
+                  Status:"Accepted"
+                });
+                alert("status updated")
+            }
+    </script>
+</body>
+</html>

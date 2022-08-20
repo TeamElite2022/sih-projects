@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ongoing Projects</title>
+</head>
+<body>
+    <ul id="list">
+    </ul>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.9.1/firebase-app.js";
+import { getFirestore, collection, getDocs, getDoc, doc,onSnapshot, setDoc, updateDoc} from "https://www.gstatic.com/firebasejs/9.9.1/firebase-firestore.js";
+var firebaseConfig = {
+    apiKey: "AIzaSyCYybtuNQHaMpcKNdTyjK_e0Y0k5xChMQI",
+
+  authDomain: "mgpa-6cc10.firebaseapp.com",
+
+  projectId: "mgpa-6cc10",
+
+  storageBucket: "mgpa-6cc10.appspot.com",
+
+  messagingSenderId: "292918906000",
+
+  appId: "1:292918906000:web:69bf0126437f9ea2abdc15"
+
+  };
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const fire=getFirestore(app)
+var stat;
+  async function getData(){
+  const querySnapshot = await getDocs(collection(fire, "apply"));
+querySnapshot.forEach((doc) => {
+  console.log(doc.id, " => ", doc.data()); 
+stat=doc.data().Status
+console.log(stat)
+if(stat=="Accepted"){
+  getItems(doc) ;
+}
+  });
+}
+
+function getItems(doc){
+    var list=document.getElementById('list')
+    var par = document.getElementById('par')
+
+    var pstm=document.createElement('li')
+    var psid=document.createElement('li')
+    var desc=document.createElement('li')
+    var mil=document.createElement('li')
+    var del=document.createElement('li')
+    var dur=document.createElement('li')
+    var bud=document.createElement('li')
+    var status=document.createElement('button')
+    var mils={}, dels={}, durs={}, buds={};
+
+    pstm.textContent="Problem Statement: "+doc.data().Probstmt
+    psid.textContent="Psid: "+doc.data().PSID 
+    desc.textContent="Description: "+doc.data().description
+    mils=doc.data().Milestones
+    dels=doc.data().Deliverables
+    durs=doc.data().Duration
+    buds=doc.data().Budget
+   status.setAttribute("id","status")
+   status.textContent="See Status"
+    console.log(Object.keys(mils).length)
+    mil.textContent="Milestones"
+    del.textContent="Deliverables"
+    dur.textContent="Duration"
+    bud.textContent="Budget"
+   
+    list.appendChild(pstm)
+    list.appendChild(psid)
+    list.appendChild(desc)
+    list.appendChild(mil)
+  
+    var uno1=document.createElement('ul')
+    var uno2=document.createElement('ul')
+    var uno3=document.createElement('ul')
+    var uno4=document.createElement('ul')
+
+    for(let i=0;i<Object.keys(mils).length;i++){
+        var milest=document.createElement('li')
+        milest.innerHTML=mils[i]
+        uno1.appendChild(milest)
+    }
+    
+    for(let i=0;i<Object.keys(dels).length;i++){
+        var deliv=document.createElement('li')
+        deliv.innerHTML=dels[i]
+        uno2.appendChild(deliv)
+    }
+    
+    for(let i=0;i<Object.keys(durs).length;i++){
+        var durat=document.createElement('li')
+        durat.innerHTML=durs[i]
+        uno3.appendChild(durat)
+    }
+    
+    for(let i=0;i<Object.keys(buds).length;i++){
+        var budge=document.createElement('li')
+        budge.innerHTML=buds[i]
+        uno4.appendChild(budge)
+    }
+list.appendChild(uno1)
+list.appendChild(del)
+list.appendChild(uno2)
+list.appendChild(dur)
+list.appendChild(uno3)
+list.appendChild(bud)
+list.appendChild(uno4)
+list.appendChild(status)
+
+status.onclick=function(){showMilestones()}
+}
+
+function showMilestones(){
+    window.location="milestone.html"
+}
+window.onload=getData
+        </script>
+</body>
+</html>

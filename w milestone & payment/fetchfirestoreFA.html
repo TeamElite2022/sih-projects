@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firestore fetchFA</title>
+</head>
+<body>
+    <a href="AcceptFA.html">Accept a user?</a><br>
+    <a href="RejectFA.html">Reject a user?</a>
+    <nav class="khu">
+        <ul>
+            <li><a href="fetchfirestoreHEI.html">hei</a></li>
+            <li><a href="fetchfirestoreFA.html">FA</a></li>
+        </ul>
+    </nav>
+    <p>Welcome User, feeling good?</p>
+
+    <form id="getUsers">
+
+        <ul id="list">
+    
+        </ul>
+        <p id="par">
+
+        </p>
+    </form>
+    <script type="module">
+
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.9.1/firebase-app.js";
+        import { getAuth } from "https://www.gstatic.com/firebasejs/9.9.1/firebase-auth.js";
+        import { getFirestore, collection, getDocs, getDoc, doc,onSnapshot, setDoc, updateDoc} from "https://www.gstatic.com/firebasejs/9.9.1/firebase-firestore.js";
+
+        const firebaseConfig={
+        apiKey: "AIzaSyCYybtuNQHaMpcKNdTyjK_e0Y0k5xChMQI",
+
+    authDomain: "mgpa-6cc10.firebaseapp.com",
+
+    databaseURL: "https://mgpa-6cc10-default-rtdb.firebaseio.com",
+
+    projectId: "mgpa-6cc10",
+
+    storageBucket: "mgpa-6cc10.appspot.com",
+
+    messagingSenderId: "292918906000",
+
+    appId: "1:292918906000:web:69bf0126437f9ea2abdc15"
+        };
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        var stdNo=0;
+
+
+        function GetAllDataRealtime(){
+            var stat;
+            const dbRef = collection(db, "FAProfile");
+           try {
+            onSnapshot(dbRef,(querySnapshot)=>{
+                    var details=[];
+                    querySnapshot.forEach((doc) => {
+                        details.push(doc.data());
+                        console.log(doc.data())
+                        stat=doc.data().Status
+                        if(stat=="To be Verified"){
+                            getItemstoList(doc); 
+                        }
+                        
+                    });
+                    
+                })
+           } catch (error) {
+            console.log(error)
+           }
+
+        }
+
+        function getItemstoList(doc){
+
+            
+            const list= document.getElementById('list')
+           
+           var header = document.createElement('li');  
+           var ProfilePic = document.createElement('img')
+           ProfilePic.setAttribute("width", "200");
+           ProfilePic.setAttribute("height", "200");
+           ProfilePic.setAttribute("alt", "Logo"); 
+           ProfilePic.setAttribute("title", "Agency Logo");
+           var Category = document.createElement('li');  
+           var Orgname = document.createElement('li');  
+           var EYear = document.createElement('li');  
+           var FName = document.createElement('li');  
+           var PhNumber = document.createElement('li');  
+           var State = document.createElement('li');  
+           var District = document.createElement('li');  
+           var Pincode = document.createElement('li');  
+           var Portfolio = document.createElement('li');  
+           var link = document.createElement('li');
+           var uid= document.createElement('li') 
+           var accept=document.createElement('button') 
+           accept.setAttribute("id",doc.data().UID) 
+           accept.setAttribute("type", "button")
+           var reject=document.createElement('button') 
+           reject.setAttribute("id",doc.data().UID) 
+           reject.setAttribute("type", "button")    
+           
+           console.log(accept.id)
+           var idn=accept.id
+           var idm=reject.id
+           console.log(idn)
+           console.log(idm)
+
+    uid.textContent="UserID: "+doc.data().UID
+    ProfilePic.setAttribute('src',doc.data().ProfilePic)
+    Category.textContent= "Category: "+doc.data().Category
+    Orgname.textContent= "Organisation name: "+doc.data().Orgname
+    EYear.textContent= "Established Year: "+doc.data().Eyear
+    FName.textContent= "Founder Name: "+ doc.data().Founder
+    PhNumber.textContent= "Phone Number: "+doc.data().Phone
+    State.textContent= "State: "+doc.data().State
+    District.textContent= "District: "+doc.data().District
+    Pincode.textContent= "Pincode: "+doc.data().Pincode
+    Portfolio.textContent= "Portfolio: "+doc.data().Portfolio
+    link.textContent= "Link: "+doc.data().Link
+    accept.innerHTML="Accept" 
+    reject.innerHTML="Decline"   
+            
+            header.appendChild(uid)
+            header.appendChild(ProfilePic)
+            header.appendChild(Category)
+            header.appendChild(Orgname)
+            header.appendChild(EYear)
+            header.appendChild(FName)
+            header.appendChild(PhNumber)
+            header.appendChild(State)
+            header.appendChild(District)
+            header.appendChild(Pincode)
+            header.appendChild(Portfolio)
+            header.appendChild(link)
+            header.appendChild(accept)
+            header.appendChild(reject)
+
+            list.appendChild(header)
+                 
+            accept.onclick= function(){acceptUser(idn)}
+            reject.onclick= function(){rejectUser(idn)}
+        }
+
+        async function acceptUser(idn){
+    await setDoc(doc(db,"FAProfile",idn),{        
+        Status5:"Accepted"       
+        },{merge:true})
+        .then(() => {
+        alert("status changed successfully");
+        console.log(idn)
+        })
+        .catch((error) => {
+        console.error(error);
+        });
+        }
+
+        function rejectUser(idn){
+            var ind=JSON.stringify(idn)
+            let reason = prompt("Enter the reasons for rejection");
+           var rea= JSON.stringify(reason)
+            console.log(rea)
+            await setDoc(doc(db,"HEIProfile",ind),{
+             Status4:"Rejected",
+             Reason: rea
+        },{merge:true})
+        .then(() => {
+        alert("status changed successfully");
+        console.log(ind)
+        })
+        .catch((error) => {
+        console.error("Error writing document: ", error);
+        });
+            
+
+        }
+       
+        window.onload = GetAllDataRealtime;
+    </script>
+</body>
+</html>

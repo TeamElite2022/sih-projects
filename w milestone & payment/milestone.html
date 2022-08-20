@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>milestone checkbox</title>
+</head>
+<body>
+    <div class="TN bzz aHS-YH" style="margin-left:0px"><div class="qj qr"></div><div class="aio UKr6le"><span class="nU false"><a href="https://meet.google.com/new?hs=180&amp;authuser=0" target="_top" class="J-Ke n0" title="Start a meeting" aria-label="Start a meeting" draggable="false">Start a meeting</a></span></div><div class="nL aif"></div></div>
+    <a href="none.html">Process a Payment</a>
+    <div id="check">
+    </div>
+    <script src= "https://www.gstatic.com/firebasejs/7.7.0/firebase-app.js"></script>
+    <script src= "https://www.gstatic.com/firebasejs/7.7.0/firebase-auth.js"></script> 
+    <script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-storage.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-firestore.js"></script>
+    <script>
+const firebaseConfig = {
+    // ...
+    apiKey: "AIzaSyCYybtuNQHaMpcKNdTyjK_e0Y0k5xChMQI",
+
+authDomain: "mgpa-6cc10.firebaseapp.com",
+
+databaseURL: "https://mgpa-6cc10-default-rtdb.firebaseio.com",
+
+projectId: "mgpa-6cc10",
+
+storageBucket: "mgpa-6cc10.appspot.com",
+
+messagingSenderId: "292918906000",
+
+appId: "1:292918906000:web:69bf0126437f9ea2abdc15"
+};
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+
+// Initialize Cloud Firestore and get a reference to the service
+const fire = firebase.firestore();
+
+async function getMilestones(){
+    var docRef = fire.collection("apply").doc("one");
+
+docRef.get().then((doc) => {
+    if (doc.exists) {
+        console.log("Document data:", doc.data());
+        getItems(doc)
+    } else {
+        // doc.data() will be undefined in this case
+        console.log("No such document!");
+    }
+}).catch((error) => {
+    console.log("Error getting document:", error);
+});
+}
+
+function getItems(doc){
+    var div= document.getElementById('check')
+    var arr={}
+    arr=doc.data().Milestones 
+    console.log(Object.keys(arr).length)
+    for(let i=0;i<Object.keys(arr).length;i++){
+        var milest=document.createElement('input')
+        var label = document.createElement('label');
+        milest.setAttribute('type','checkbox')
+        milest.setAttribute('id',i)
+        label.htmlFor=i
+        label.appendChild(document.createTextNode(arr[i]+"\n"))
+        console.log(arr[i])
+        check.appendChild(milest)
+        check.appendChild(label)
+    }
+
+}
+
+window.onload=getMilestones
+
+
+        </script>
+</body>
+</html>
