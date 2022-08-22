@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <!--<script src="//code.tidio.co/rdv2nhtcsgoyk4diyi44n7zhumb8yygw.js" async></script>-->
+    <link rel="stylesheet" href="sandeep.css">
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+</head>
+<body>
+  <div class="row">
+    <div class="column left" id="left" >
+      <lottie-player src="https://assets9.lottiefiles.com/packages/lf20_pjagkisd.json"  background-color="#00A877"  speed="1"   loop  autoplay></lottie-player>
+    </div>
+    <div class="column right" id="right" >
+    <h1>Login</h1>
+    <form autocomplete="off" onsubmit="login(event)">
+   
+        <label for="loginEmail">Enter your email</label>
+        <input type="email" placeholder="abc@xyz.ijk" id="loginEmail"><br>
+        <a href="forgotPass.html">Forgot Password?</a><br>
+        <label for="loginPassword">Enter your Password</label>
+        <input type="password" placeholder="abc..." id="loginPassword"><br>
+     
+        <button type="submit" >submit</button>
+    
+    </form>
+
+Don't have an account?<a href="signUp.html">Register</a>
+<button onclick="loginWithGoogle()">Log In with Google</button>
+<button onclick="logout()">Logout</button>
+</div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-storage.js"></script>
+
+<script>
+    // Your web app's Firebase configuration
+    var firebaseConfig = {
+      apiKey: "AIzaSyCYybtuNQHaMpcKNdTyjK_e0Y0k5xChMQI",
+
+    authDomain: "mgpa-6cc10.firebaseapp.com",
+
+    projectId: "mgpa-6cc10",
+
+    storageBucket: "mgpa-6cc10.appspot.com",
+
+    messagingSenderId: "292918906000",
+
+    appId: "1:292918906000:web:69bf0126437f9ea2abdc15"
+
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+  </script>
+  <script src="veri.js"></script>
+</body>
+</html>
